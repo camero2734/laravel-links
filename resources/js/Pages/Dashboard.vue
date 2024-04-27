@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { ref } from 'vue';
+
+interface Link {
+    linkId: string;
+    url: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+}
 
 defineProps<{
     canResetPassword?: boolean;
@@ -19,11 +26,15 @@ const form = useForm({
     url: ''
 });
 
-const url = route('link.create');
-
 const submit = () => {
     form.post(route('link.create'));
 };
+
+const links = ref<Link[] | null>(null);
+fetch(route('link.index'))
+    .then(response => response.json())
+    .then(data => links.value = data);
+
 </script>
 
 
@@ -32,10 +43,23 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Your Links</h2>
         </template>
 
-        <form @submit.prevent="submit">
+        <section class="text-lg">
+            <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight mb-4">Your Links</h3>
+
+            <ul v-if="links">
+                <li v-for="link in links" :key="link.linkId">
+                    <a :href="link.url" class="text-blue-500">{{ link.title }}</a>
+                </li>
+            </ul>
+        </section>
+
+        <section class="text-lg mx-10">
+            <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight mb-4">Create a New Link</h3>
+
+            <form @submit.prevent="submit">
             <div>
                 <InputLabel for="title" value="Title" />
 
@@ -70,5 +94,7 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+        </section>
+        
     </AuthenticatedLayout>
 </template>
