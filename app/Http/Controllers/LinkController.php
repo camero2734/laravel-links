@@ -9,69 +9,73 @@ use Inertia\Inertia;
 
 class LinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-      // This ideally would have pagination
-      $links = Link::orderBy("created_at", "desc")->where("user_id", auth()->user()->id);
+  /**
+   * Display a listing of the resource.
+   */
+  public function index()
+  {
+    // This ideally would have pagination
+    $links = Link::orderBy("created_at", "desc")->where("user_id", auth()->user()->id);
 
-      return Inertia::render("Links/Index", [
-        "links" => $links->get(["link_id", "url", "title", "created_at", "updated_at"])
-      ]);
-    }
+    return Inertia::render("Links/Index", [
+      "links" => $links->get(["link_id", "url", "title", "created_at", "updated_at"])
+    ]);
+  }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-      return Inertia::render("Links/Create");
-    }
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create()
+  {
+    return Inertia::render("Links/Create");
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-      // TODO: Validate request
-      $link = new Link($request->all());
-      $link["user_id"] = auth()->user()->id;
-      $link->save();
+  /**
+   * Store a newly created resource in storage.
+   */
+  public function store(Request $request)
+  {
+    $params = $request->validate([
+      'title' => 'required|string',
+      'url' => 'required|url',
+    ]);
 
-      return Redirect::route('dashboard');
-    }
+    $link = new Link($params);
+    $link["user_id"] = auth()->user()->id;
+    $link->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Link $link)
-    {
-        //
-    }
+    return Redirect::route('dashboard');
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Link $link)
-    {
-        //
-    }
+  /**
+   * Display the specified resource.
+   */
+  public function show(Link $link)
+  {
+    //
+  }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Link $link)
-    {
-        //
-    }
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit(Link $link)
+  {
+    //
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Link $link)
-    {
-        //
-    }
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(Request $request, Link $link)
+  {
+    //
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(Link $link)
+  {
+    //
+  }
 }

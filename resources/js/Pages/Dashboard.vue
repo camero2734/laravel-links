@@ -37,7 +37,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="{{ url }}" />
+                <InputLabel for="title" value="Title" />
 
                 <TextInput
                     id="title"
@@ -51,7 +51,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Link" />
+                <InputLabel for="url" value="URL" />
 
                 <TextInput
                     id="url"

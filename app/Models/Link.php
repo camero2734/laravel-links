@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Hidehalo\Nanoid\Client as Nanoid;
 
 class Link extends Model
 {
@@ -24,7 +25,8 @@ class Link extends Model
     parent::boot();
 
     static::creating(function ($model) {
-      $model->link_id = "abc";
+      $nanoid = new Nanoid();
+      $model->link_id = $nanoid->formattedId($alphabet = '0123456789ABCDEFGHJKMNPQRSTVWXYZ', $size = 10);
     });
   }
 }
