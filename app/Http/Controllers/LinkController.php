@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class LinkController extends Controller
 {
@@ -12,7 +14,12 @@ class LinkController extends Controller
      */
     public function index()
     {
-        //
+      // This ideally would have pagination
+      $links = Link::orderBy("created_at", "desc")->where("user_id", auth()->user()->id);
+
+      return Inertia::render("Links/Index", [
+        "links" => $links->get(["link_id", "url", "title", "created_at", "updated_at"])
+      ]);
     }
 
     /**
@@ -20,7 +27,7 @@ class LinkController extends Controller
      */
     public function create()
     {
-        //
+      return Inertia::render("Links/Create");
     }
 
     /**
@@ -28,7 +35,12 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      // TODO: Validate request
+      $link = new Link($request->all());
+      $link["user_id"] = auth()->user()->id;
+      $link->save();
+
+      return Redirect::route('dashboard');
     }
 
     /**
