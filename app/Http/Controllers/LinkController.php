@@ -40,18 +40,18 @@ class LinkController extends Controller
   /**
    * Redirect to the specified resource.
    */
-  public function show($id)
+  public function show($link_id)
   {
-    $link = Link::where("link_id", $id)->first();
+    $link = Link::where("link_id", $link_id)->first();
     return Redirect::to($link->url);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update($id, Request $request)
+  public function update($link_id, Request $request)
   {
-    $link = Link::where("link_id", $id)->where("user_id", auth()->user()->id)->first();
+    $link = Link::where("link_id", $link_id)->where("user_id", auth()->user()->id)->first();
 
     $params = $request->validate([
       "title" => "required|string",
@@ -66,9 +66,9 @@ class LinkController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy($id)
+  public function destroy($link_id)
   {
-    $link = Link::where("link_id", $id)->where("user_id", auth()->user()->id)->first();
+    $link = Link::where("link_id", $link_id)->where("user_id", auth()->user()->id)->first();
 
     if ($link) {
       $link->delete();
