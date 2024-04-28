@@ -20,6 +20,11 @@ class Link extends Model
     'url',
   ];
 
+  protected $hidden = [
+    'id',
+    'user_id',
+  ];
+
   public static function boot()
   {
     parent::boot();
