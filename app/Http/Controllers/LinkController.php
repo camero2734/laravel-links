@@ -38,6 +38,15 @@ class LinkController extends Controller
   }
 
   /**
+   * Redirect to the specified resource.
+   */
+  public function show($id)
+  {
+    $link = Link::where("link_id", $id)->first();
+    return Redirect::to($link->url);
+  }
+
+  /**
    * Update the specified resource in storage.
    */
   public function update($id, Request $request)

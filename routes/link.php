@@ -12,4 +12,7 @@ Route::middleware('auth')->group(function () {
     //     ->name('link.destroy');
 
     Route::apiResource('links', LinkController::class);
+
+    Route::get('{id}', [LinkController::class, 'show'])
+        ->name('links.show');
 });
