@@ -21,14 +21,6 @@ class LinkController extends Controller
   }
 
   /**
-   * Show the form for creating a new resource.
-   */
-  public function create()
-  {
-    return Inertia::render("Links/Create");
-  }
-
-  /**
    * Store a newly created resource in storage.
    */
   public function store(Request $request)
@@ -46,22 +38,6 @@ class LinkController extends Controller
   }
 
   /**
-   * Display the specified resource.
-   */
-  public function show(Link $link)
-  {
-    //
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   */
-  public function edit(Link $link)
-  {
-    //
-  }
-
-  /**
    * Update the specified resource in storage.
    */
   public function update(Request $request, Link $link)
@@ -72,8 +48,14 @@ class LinkController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Link $link)
+  public function destroy($id)
   {
-    //
+    $link = Link::where("link_id", $id)->where("user_id", auth()->user()->id)->first();
+
+    if ($link) {
+      $link->delete();
+    }
+
+    return $link;
   }
 }
