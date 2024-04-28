@@ -2,13 +2,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/Components/ui/InputError.vue';
+import InputLabel from '@/Components/ui/InputLabel.vue';
+import PrimaryButton from '@/Components/ui/PrimaryButton.vue';
+import TextInput from '@/Components/ui/TextInput.vue';
 import LinkItem from '@/Components/LinkItem.vue';
 import { ref } from 'vue';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface Link {
     link_id: string;
@@ -38,8 +38,14 @@ function fetchLinks() {
 const submitCreateLink = async () => {
     axios.post(route('links.store'), form.data())
         .then(() => {
+            console.log("got response");
             form.reset();
+            form.clearErrors();
             fetchLinks();
+        }).catch(e => {
+            if (!(e instanceof AxiosError) || !e.response?.data) return;
+            form.setError('title', e.response.data.errors.title?.join(", "));
+            form.setError('url', e.response.data.errors.url?.join(", "));
         });
 };
 
