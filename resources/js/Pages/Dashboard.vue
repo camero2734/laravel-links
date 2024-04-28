@@ -8,6 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import LinkItem from '@/Components/LinkItem.vue';
 import { ref } from 'vue';
+import axios from 'axios';
 
 interface Link {
     link_id: string;
@@ -30,15 +31,16 @@ const form = useForm({
 const links = ref<Link[] | null>(null);
 
 function fetchLinks() {
-    fetch(route('links.index'))
-        .then(response => response.json())
-        .then(data => links.value = data);
+    axios.get(route('links.index'))
+        .then(response => links.value = response.data);
 }
 
 const submitCreateLink = async () => {
-    form.post(route('links.store'), {
-        onSuccess: fetchLinks
-    });
+    axios.post(route('links.store'), form.data())
+        .then(() => {
+            form.reset();
+            fetchLinks();
+        });
 };
 
 // Initial fetch

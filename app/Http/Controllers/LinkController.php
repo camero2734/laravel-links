@@ -34,15 +34,24 @@ class LinkController extends Controller
     $link["user_id"] = auth()->user()->id;
     $link->save();
 
-    return Redirect::route('dashboard');
+    return $link;
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Link $link)
+  public function update($id, Request $request)
   {
-    //
+    $link = Link::where("link_id", $id)->where("user_id", auth()->user()->id)->first();
+
+    $params = $request->validate([
+      "title" => "required|string",
+      "url" => "required|url",
+    ]);
+
+    $link->update($params);
+
+    return $link;
   }
 
   /**
