@@ -23,11 +23,13 @@ defineProps<{
     status?: string;
 }>();
 
+// The form data to create a new link
 const form = useForm({
     title: '',
     url: ''
 });
 
+// Fetched links
 const links = ref<Link[] | null>(null);
 
 function fetchLinks() {
@@ -35,10 +37,10 @@ function fetchLinks() {
         .then(response => links.value = response.data);
 }
 
+// Submit the form to create a new link
 const submitCreateLink = async () => {
     axios.post(route('links.store'), form.data())
         .then(() => {
-            console.log("got response");
             form.reset();
             form.clearErrors();
             fetchLinks();
@@ -105,11 +107,12 @@ fetchLinks();
         <section class="text-lg mx-10">
             <h3 class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight mb-4">Existing Links</h3>
 
-            <ul v-if="links" class="flex flex-col gap-4">
+            <ul v-if="links?.length" class="flex flex-col gap-4">
                 <li v-for="link in links" :key="link.link_id">
                     <LinkItem :url="link.url" :title="link.title" :linkId="link.link_id" @destroy="fetchLinks" @edit="fetchLinks" />
                 </li>
             </ul>
+            <p v-else class="text-white text-sm">No links created yet!</p>
         </section>
     </AuthenticatedLayout>
 </template>

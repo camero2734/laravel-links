@@ -51,7 +51,10 @@ class LinkController extends Controller
    */
   public function update($link_id, Request $request)
   {
+    // Ensure the link exists and belongs to the user
     $link = Link::where("link_id", $link_id)->where("user_id", auth()->user()->id)->first();
+
+    if (!$link) abort(404, "Link not found.");
 
     $params = $request->validate([
       "title" => "required|string",
@@ -68,12 +71,12 @@ class LinkController extends Controller
    */
   public function destroy($link_id)
   {
+    // Ensure the link exists and belongs to the user
     $link = Link::where("link_id", $link_id)->where("user_id", auth()->user()->id)->first();
 
-    if ($link) {
-      $link->delete();
-    }
+    if (!$link) abort(404, "Link not found.");
 
+    $link->delete();
     return $link;
   }
 }
