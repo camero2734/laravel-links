@@ -4,7 +4,7 @@
 This project was made using the [Laravel Breeze template](https://github.com/laravel/breeze). This covered the
 authentication, layout, and styling for the project.
 
-The project is a simple link sharing platform. Users can create links and share them with others. Users can also create, edit, and delete their own links.
+The project is a simple link sharing platform. Users can create links and share them with others. Users can also edit, and delete their own links.
 
 A list of files that were added by me:
 - `app/Http/Controllers/LinkController.php`
